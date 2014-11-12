@@ -20,11 +20,11 @@ public class App
         // Just leave the list empty if you do not want specific terms / users.
         // This should be read from file as well. // TODO
         List<Long> users = Lists.newArrayList(1234L, 566788L);
-        List<String> stopwords = Lists.newArrayList("twitter", "api");
+        List<String> stopWords = Lists.newArrayList("twitter", "api");
         
         // Start streaming.
-        TweetStreamer.stream(apiKeys, stopwords, users, status -> {
-            System.err.println(status.getText());
+        TweetStreamer.stream(apiKeys, stopWords, users, tweet -> {
+            System.err.println(tweet.getText());
         });
     }
     
