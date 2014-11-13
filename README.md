@@ -1,4 +1,4 @@
-#TweetSniffer - Twitter Streaming API with Lambda Expressions
+#Twitter Streaming API with Lambda Expressions
 
 So far, the program contains a wrapper, that connects to the Twitter Streaming API with a given list of stop words and / or users to track. For each new Tweet arriving the given function object accepts it, so you can process the Tweets as you like without worrying about the API.
 
