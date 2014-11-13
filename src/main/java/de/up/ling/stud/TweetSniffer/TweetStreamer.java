@@ -61,8 +61,5 @@ public class TweetStreamer {
 
         stream.addListener(listener);
         stream.filter(filter);
-        
-        // Start streaming!
-        stream.sample();
     }
 }

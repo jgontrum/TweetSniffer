@@ -19,8 +19,8 @@ public class App
         // Build a list of stopwords or user ids to track.
         // Just leave the list empty if you do not want specific terms / users.
         // This should be read from file as well. // TODO
-        List<Long> users = Lists.newArrayList(1234L, 566788L);
-        List<String> stopWords = Lists.newArrayList("twitter", "api");
+        List<Long> users = Lists.newArrayList();
+        List<String> stopWords = Lists.newArrayList("squirrel");
         
         // Start streaming.
         TweetStreamer.stream(apiKeys, stopWords, users, tweet -> {
