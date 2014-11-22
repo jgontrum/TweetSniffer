@@ -18,8 +18,8 @@ public class App
         String[] apiKeys = loadAPISettings(configFile);
         String[] sqlSettings = loadSQLSettings(configFile);
         
-        // Connect do database...
-        MySQLAccess database = new MySQLAccess(sqlSettings);
+        // Setup the DB structure and connect to the MySQL server
+        MySQLAccessor database = new MySQLAccessor(sqlSettings);
         
         // Build a list of stopwords or user ids to track.
         // Just leave the list empty if you do not want specific terms / users.
@@ -27,12 +27,15 @@ public class App
         List<Long> users = Lists.newArrayList();
         List<String> stopWords = Lists.newArrayList("squirrel");
         
-        /*
+        
         // Start streaming.
         TweetStreamer.stream(apiKeys, stopWords, users, tweet -> {
-            System.err.println(tweet.getText());
+            if (!tweet.isRetweet()) { //ignore RTs
+                System.err.println("Tweet: " + tweet.getText());
+                database.queryTweet(tweet);    
+            }
         });
-        */
+        
     }
     
     private static String[] loadAPISettings(String file) throws IOException  {
@@ -73,5 +76,6 @@ public class App
             System.exit(-1);
         }
 
-        return sqlSettings;    }
+        return sqlSettings;    
+    }
 }

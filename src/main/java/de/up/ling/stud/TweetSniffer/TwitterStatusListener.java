@@ -42,6 +42,8 @@ public class TwitterStatusListener implements StatusListener{
     @Override
     public void onException(Exception excptn) {
         System.err.println("There has been an exception. Very intersting. Also, this should be replaced by a more usefull message.");
+        System.err.println("Exception: " + excptn);
+        excptn.printStackTrace();
     }
     
 }
