@@ -1,14 +1,10 @@
 package de.up.ling.stud.TweetSniffer;
 
-import com.google.common.collect.Lists;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
-import org.jcp.xml.dsig.internal.dom.DOMXMLSignature;
 
 public class App 
 {
