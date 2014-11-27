@@ -25,16 +25,13 @@ import twitter4j.conf.ConfigurationBuilder;
  * @author Johannes Gontrum <gontrum@uni-potsdam.de>
  */
 public class TweetStreamer {
-    public static void stream(String[] apiKeys, List<String> stopwords, List<Long> users, Consumer<Status> fn) throws InterruptedException {
+    public static void stream(String[] apiKeys, String[] stopwords, long[] users, double[][] coordinates, Consumer<Status> fn) throws InterruptedException {
         // Save the arguments
         String consumerKey = apiKeys[0];
         String consumerSecret = apiKeys[1];
         String token = apiKeys[2];
         String secret = apiKeys[3];
-        
-        List<String> stopwordList = stopwords;
-        List<Long> userList = users;
-        
+
         // Store the configuration
         ConfigurationBuilder config = new ConfigurationBuilder();
         config.setDebugEnabled(true);
@@ -52,8 +49,9 @@ public class TweetStreamer {
         //  * by Location (locations[][])
         //  * by Language (language[])
         FilterQuery filter = new FilterQuery();
-        filter.track(stopwordList.toArray(new String[stopwordList.size()]));
-        filter.follow(Longs.toArray(userList));
+        filter.track(stopwords);
+        filter.follow(users);
+        filter.locations(coordinates);
         
         // Create the stream-object
         // Documentation: http://twitter4j.org/javadoc/twitter4j/TwitterStream.html

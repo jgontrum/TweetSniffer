@@ -31,7 +31,7 @@ public class MySQLAccessor {
         database = new MySQLDatabase(sqlSettings, tableLayout);
         
         // Make sure the current db exists
-        currentTable = "testi";
+        currentTable = sqlSettings[3];
         if (!database.doesTableExist(currentTable)) {
             database.createTable(currentTable);
         }
