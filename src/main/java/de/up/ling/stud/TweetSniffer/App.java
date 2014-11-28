@@ -10,6 +10,7 @@ import java.util.Properties;
 public class App 
 {
     public static void main( String[] args ) throws InterruptedException, FileNotFoundException, IOException {
+        boolean dbTest = false;
         // Parse CLI arguments
         CommandLineArguments arguments = new CommandLineArguments();
         JCommander cliParser = new JCommander(arguments, args);
@@ -21,6 +22,11 @@ public class App
             System.exit(0);
         }
         
+        // Change value only of not set true in file
+        if (!dbTest) {
+            dbTest = arguments.testDB;
+        }
+        
         // Load the four API keys from a file
         String[] apiKeys = loadAPISettings(arguments.configFile);
         String[] sqlSettings = loadSQLSettings(arguments.configFile);
@@ -29,11 +35,14 @@ public class App
         String[] stopWords = loadFilterTerms(arguments.filterFile);
         long[] users = loadFilterUsers(arguments.filterFile);
         
+        sqlSettings[3] = "neuerUTF8Test";
         // Setup the DB structure and connect to the MySQL server
         MySQLAccessor database = new MySQLAccessor(sqlSettings);
         
+        
+        
         // Leave the program when a connection to the database is established
-        if (arguments.testDB) {
+        if (dbTest) {
             System.exit(0);
         }
         

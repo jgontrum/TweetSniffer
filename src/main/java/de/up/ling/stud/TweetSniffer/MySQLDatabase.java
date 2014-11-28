@@ -5,8 +5,6 @@
  */
 package de.up.ling.stud.TweetSniffer;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -147,8 +145,14 @@ public class MySQLDatabase {
             queryBuilder.replace(
                     queryBuilder.length() - 2, 
                     queryBuilder.length(), 
-                    "\n);");
+                    "\n) ");
             
+            
+            // Add encoding settings
+            queryBuilder.append("DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci;");
+            
+            System.err.println(queryBuilder.toString());
+
             try {
                 int result = statement.executeUpdate(queryBuilder.toString());
             } catch (SQLException ex) {
