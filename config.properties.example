@@ -2,3 +2,8 @@ consumerKey=
 consumerSecret=
 token=
 secret=
+
+mySQLHost=jdbc:mysql:// # enter host here
+mySQLUser=
+mySQLPassword=
+mySQLTablePrefix=testTable # name of the table to write into! WARNING! not yet secure, is writen directly into the query.

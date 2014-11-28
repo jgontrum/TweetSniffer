@@ -5,8 +5,6 @@
  */
 package de.up.ling.stud.TweetSniffer;
 
-import com.google.common.primitives.Longs;
-import java.util.List;
 import java.util.function.Consumer;
 import twitter4j.FilterQuery;
 import twitter4j.Status;

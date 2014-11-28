@@ -1,5 +1,6 @@
 package de.up.ling.stud.TweetSniffer;
 
+import com.beust.jcommander.JCommander;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,20 +9,33 @@ import java.util.Properties;
 
 public class App 
 {
-    public static void main( String[] args ) throws InterruptedException, FileNotFoundException, IOException
-    {
-        String configFile = "config.properties";
-        String filterConfigFile = "twitter.properties";
-        // Load the four API keys from a file
-        String[] apiKeys = loadAPISettings(configFile);
-        String[] sqlSettings = loadSQLSettings(configFile);
+    public static void main( String[] args ) throws InterruptedException, FileNotFoundException, IOException {
+        // Parse CLI arguments
+        CommandLineArguments arguments = new CommandLineArguments();
+        JCommander cliParser = new JCommander(arguments, args);
+        cliParser.setProgramName("Tweet2SQL");
+
+        // Print help
+        if (arguments.help) {
+            cliParser.usage();
+            System.exit(0);
+        }
         
-        double[][] coordinates = loadFilterCoordinates(filterConfigFile);
-        String[] stopWords = loadFilterTerms(filterConfigFile);
-        long[] users = loadFilterUsers(filterConfigFile);
+        // Load the four API keys from a file
+        String[] apiKeys = loadAPISettings(arguments.configFile);
+        String[] sqlSettings = loadSQLSettings(arguments.configFile);
+        
+        double[][] coordinates = loadFilterCoordinates(arguments.filterFile);
+        String[] stopWords = loadFilterTerms(arguments.filterFile);
+        long[] users = loadFilterUsers(arguments.filterFile);
         
         // Setup the DB structure and connect to the MySQL server
         MySQLAccessor database = new MySQLAccessor(sqlSettings);
+        
+        // Leave the program when a connection to the database is established
+        if (arguments.testDB) {
+            System.exit(0);
+        }
         
         // Start streaming.
         TweetStreamer.stream(apiKeys, stopWords, users, coordinates, tweet -> {
@@ -30,7 +44,6 @@ public class App
                 database.queryTweet(tweet);    
             }
         });
-        
     }
     
     private static String[] loadAPISettings(String file) throws IOException  {
