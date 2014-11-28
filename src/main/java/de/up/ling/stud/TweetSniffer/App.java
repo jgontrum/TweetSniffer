@@ -35,11 +35,8 @@ public class App
         String[] stopWords = loadFilterTerms(arguments.filterFile);
         long[] users = loadFilterUsers(arguments.filterFile);
         
-        sqlSettings[3] = "neuerUTF8Test";
         // Setup the DB structure and connect to the MySQL server
         MySQLAccessor database = new MySQLAccessor(sqlSettings);
-        
-        
         
         // Leave the program when a connection to the database is established
         if (dbTest) {
