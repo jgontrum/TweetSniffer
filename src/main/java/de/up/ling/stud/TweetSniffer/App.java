@@ -116,14 +116,16 @@ public class App
         
         for (int i = 0; i < allCoordinates.length; i++) {
             String[] coordinateValues = allCoordinates[i].split(",");
-            double longSW = Double.parseDouble(coordinateValues[0]);
-            double latSW = Double.parseDouble(coordinateValues[1]);
-            double longNE = Double.parseDouble(coordinateValues[2]);
-            double latNE = Double.parseDouble(coordinateValues[3]);
-            ret[i*2][0] = longSW;
-            ret[i*2][1] = latSW;
-            ret[i*2+1][0] = longNE;
-            ret[i*2+1][1] = latNE;
+            if (coordinateValues.length == 4) {
+                double longSW = Double.parseDouble(coordinateValues[0]);
+                double latSW = Double.parseDouble(coordinateValues[1]);
+                double longNE = Double.parseDouble(coordinateValues[2]);
+                double latNE = Double.parseDouble(coordinateValues[3]);
+                ret[i * 2][0] = longSW;
+                ret[i * 2][1] = latSW;
+                ret[i * 2 + 1][0] = longNE;
+                ret[i * 2 + 1][1] = latNE;
+            }
         }
                 
         return ret;
