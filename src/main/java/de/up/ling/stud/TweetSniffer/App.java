@@ -10,7 +10,7 @@ import java.util.Properties;
 public class App 
 {
     public static void main( String[] args ) throws InterruptedException, FileNotFoundException, IOException {
-        boolean dbTest = true;
+        boolean dbTest = false;
         // Parse CLI arguments
         CommandLineArguments arguments = new CommandLineArguments();
         JCommander cliParser = new JCommander(arguments, args);
