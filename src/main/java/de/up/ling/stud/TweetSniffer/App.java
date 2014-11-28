@@ -10,7 +10,7 @@ import java.util.Properties;
 public class App 
 {
     public static void main( String[] args ) throws InterruptedException, FileNotFoundException, IOException {
-        boolean dbTest = false;
+        boolean dbTest = true;
         // Parse CLI arguments
         CommandLineArguments arguments = new CommandLineArguments();
         JCommander cliParser = new JCommander(arguments, args);
@@ -112,23 +112,27 @@ public class App
         
         String[] allCoordinates = prop.getProperty("coordinates", "").split(";");
         
+        if (allCoordinates[0].length() > 0) {
+        
         double[][] ret = new double[allCoordinates.length * 2][2];
         
         for (int i = 0; i < allCoordinates.length; i++) {
             String[] coordinateValues = allCoordinates[i].split(",");
-            if (coordinateValues.length == 4) {
-                double longSW = Double.parseDouble(coordinateValues[0]);
-                double latSW = Double.parseDouble(coordinateValues[1]);
-                double longNE = Double.parseDouble(coordinateValues[2]);
-                double latNE = Double.parseDouble(coordinateValues[3]);
-                ret[i * 2][0] = longSW;
-                ret[i * 2][1] = latSW;
-                ret[i * 2 + 1][0] = longNE;
-                ret[i * 2 + 1][1] = latNE;
-            }
+            double longSW = Double.parseDouble(coordinateValues[0]);
+            double latSW = Double.parseDouble(coordinateValues[1]);
+            double longNE = Double.parseDouble(coordinateValues[2]);
+            double latNE = Double.parseDouble(coordinateValues[3]);
+            ret[i * 2][0] = longSW;
+            ret[i * 2][1] = latSW;
+            ret[i * 2 + 1][0] = longNE;
+            ret[i * 2 + 1][1] = latNE;
         }
                 
         return ret;
+        
+        } else {
+            return new double[0][0];
+        }
     }
     
     /**
@@ -146,13 +150,17 @@ public class App
         
         String[] allUsers = prop.getProperty("users", "").split(";");
         
-        long[] ret = new long[allUsers.length];
-        
-        for (int i = 0; i < allUsers.length; i++) {
-            ret[i] = Long.parseLong(allUsers[i]);
+        if (allUsers[0].length() > 0) {
+            long[] ret = new long[allUsers.length];
+
+            for (int i = 0; i < allUsers.length; i++) {
+                ret[i] = Long.parseLong(allUsers[i]);
+            }
+            return ret;
+        } else {
+            return new long[0];
         }
-        
-        return ret;
+
     }
     
     /**
@@ -169,7 +177,10 @@ public class App
         prop.load(input);
         
         String[] terms = prop.getProperty("terms", "").split(";");
-        
-        return terms;
+        if (terms[0].length() > 0) {
+            return terms;
+        } else {
+            return new String[0];
+        }
     }
 }

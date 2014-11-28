@@ -151,8 +151,6 @@ public class MySQLDatabase {
             // Add encoding settings
             queryBuilder.append("DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci;");
             
-            System.err.println(queryBuilder.toString());
-
             try {
                 int result = statement.executeUpdate(queryBuilder.toString());
             } catch (SQLException ex) {
