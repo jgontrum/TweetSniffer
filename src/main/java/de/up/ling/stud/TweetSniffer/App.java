@@ -132,13 +132,45 @@ public class App
         return ret;
     }
     
-    // TODO
+    /**
+     * The filed 'users' in the configuration file describes user ids to follow.
+     * They must be separated by a semicolon.
+     * @param configFile
+     * @return
+     * @throws IOException 
+     */
     private static long[] loadFilterUsers(String configFile) throws IOException {
-        return new long[0];
+        // Load settings from property-file
+        Properties prop = new Properties();
+        InputStream input = new FileInputStream(configFile);
+        prop.load(input);
+        
+        String[] allUsers = prop.getProperty("users", "").split(";");
+        
+        long[] ret = new long[allUsers.length];
+        
+        for (int i = 0; i < allUsers.length; i++) {
+            ret[i] = Long.parseLong(allUsers[i]);
+        }
+        
+        return ret;
     }
     
-    // TODO
+    /**
+     * The filed 'terms' in the configuration file describes stopwords to track.
+     * They must be separated by a semicolon.
+     * @param configFile
+     * @return
+     * @throws IOException 
+     */
     private static String[] loadFilterTerms(String configFile) throws IOException {
-        return new String[0];
+        // Load settings from property-file
+        Properties prop = new Properties();
+        InputStream input = new FileInputStream(configFile);
+        prop.load(input);
+        
+        String[] terms = prop.getProperty("terms", "").split(";");
+        
+        return terms;
     }
 }
