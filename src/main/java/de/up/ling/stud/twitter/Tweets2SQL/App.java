@@ -1,4 +1,4 @@
-package de.up.ling.stud.TweetSniffer;
+package de.up.ling.stud.twitter.Tweets2SQL;
 
 import com.beust.jcommander.JCommander;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ public class App
         // Parse CLI arguments
         CommandLineArguments arguments = new CommandLineArguments();
         JCommander cliParser = new JCommander(arguments, args);
-        cliParser.setProgramName("Tweet2SQL");
+        cliParser.setProgramName("Tweets2SQL");
 
         // Print help
         if (arguments.help) {
