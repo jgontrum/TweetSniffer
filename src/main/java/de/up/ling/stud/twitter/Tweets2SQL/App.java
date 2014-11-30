@@ -81,7 +81,7 @@ public class App
 
         String[] sqlSettings = new String[4];
 
-        sqlSettings[0] = prop.getProperty("mySQLHost", "");
+        sqlSettings[0] = "jdbc:mysql://" + prop.getProperty("mySQLHost", "");
         sqlSettings[1] = prop.getProperty("mySQLUser", "");
         sqlSettings[2] = prop.getProperty("mySQLPassword", "");
         sqlSettings[3] = prop.getProperty("mySQLTablePrefix", "DEFAULT");
