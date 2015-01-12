@@ -6,10 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import twitter4j.TwitterException;
 
 public class App 
 {
-    public static void main( String[] args ) throws InterruptedException, FileNotFoundException, IOException {
+    public static void main( String[] args ) throws InterruptedException, FileNotFoundException, IOException, TwitterException {
         boolean dbTest = false;
         // Parse CLI arguments
         CommandLineArguments arguments = new CommandLineArguments();
@@ -43,13 +44,24 @@ public class App
             System.exit(0);
         }
         
-        // Start streaming.
-        TweetStreamer.stream(apiKeys, stopWords, users, coordinates, tweet -> {
-            if (!tweet.isRetweet()) { //ignore RTs
-                System.out.println("Tweet: " + tweet.getText());
-                database.queryTweet(tweet);    
-            }
-        });
+        // Decide whether to stream Tweets or to read them from file.
+        if (arguments.jsonFile == null) {
+            // Start streaming
+            TweetStreamer.stream(apiKeys, stopWords, users, coordinates, (tweet, json) -> {
+                if (!tweet.isRetweet()) { //ignore RTs
+                    System.out.println("Tweet: " + tweet.getText());
+                    database.queryTweet(tweet, json);
+                }
+            });
+        } else {
+            JSONReader.stream(arguments.jsonFile, (tweet, json) -> {
+                if (!tweet.isRetweet()) { //ignore RTs
+                    System.out.println("Tweet: " + tweet.getText());
+                    database.queryTweet(tweet, json);
+                }
+            });
+        }
+        
     }
     
     private static String[] loadAPISettings(String file) throws IOException  {

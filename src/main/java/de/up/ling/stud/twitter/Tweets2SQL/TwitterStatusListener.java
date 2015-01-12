@@ -5,26 +5,28 @@
  */
 package de.up.ling.stud.twitter.Tweets2SQL;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.TwitterObjectFactory;
 
 /**
  *
  * @author Johannes Gontrum <gontrum@uni-potsdam.de>
  */
 public class TwitterStatusListener implements StatusListener{
-    private Consumer<Status> fn;
+    private BiConsumer<Status, String> fn;
     
-    public TwitterStatusListener(Consumer<Status> fn) {
+    public TwitterStatusListener(BiConsumer<Status, String> fn) {
         this.fn = fn;
     }
     
     @Override
     public void onStatus(Status status) {
-        fn.accept(status);
+        fn.accept(status, TwitterObjectFactory.getRawJSON(status));
     }
 
     @Override

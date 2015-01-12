@@ -39,7 +39,7 @@ public class MySQLAccessor {
     }
     
     
-    public void queryTweet(Status tweet) {
+    public void queryTweet(Status tweet, String json) {
         Map<String, Object> insert = new HashMap<>();
         
         tableLayout.keySet().forEach(column -> {
@@ -58,7 +58,7 @@ public class MySQLAccessor {
                     insertValue = tweet.getCreatedAt().getTime() / 1000L; // UNIX timestamp
                     break;
                 case "JSON":
-                    insertValue = TwitterObjectFactory.getRawJSON(tweet);
+                    insertValue = json;
                     break;
             }
             insert.put(column, insertValue);
@@ -75,9 +75,9 @@ public class MySQLAccessor {
      * @param values 
      */
     private void saveInsert(String table, Map<String, Object> values) {
-        if (!database.doesTableExist(currentTable)) {
-            database.createTable(currentTable);
-        }
+//        if (!database.doesTableExist(currentTable)) {
+//            database.createTable(currentTable);
+//        }
         database.insert(table, values);
     }
 }

@@ -5,6 +5,7 @@
  */
 package de.up.ling.stud.twitter.Tweets2SQL;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import twitter4j.FilterQuery;
 import twitter4j.Status;
@@ -23,7 +24,7 @@ import twitter4j.conf.ConfigurationBuilder;
  * @author Johannes Gontrum <gontrum@uni-potsdam.de>
  */
 public class TweetStreamer {
-    public static void stream(String[] apiKeys, String[] stopwords, long[] users, double[][] coordinates, Consumer<Status> fn) throws InterruptedException {
+    public static void stream(String[] apiKeys, String[] stopwords, long[] users, double[][] coordinates, BiConsumer<Status, String> fn) throws InterruptedException {
         // Save the arguments
         String consumerKey = apiKeys[0];
         String consumerSecret = apiKeys[1];
@@ -37,6 +38,8 @@ public class TweetStreamer {
         config.setOAuthConsumerSecret(consumerSecret);
         config.setOAuthAccessToken(token);
         config.setOAuthAccessTokenSecret(secret);
+        
+        config.setJSONStoreEnabled(true);
         
         // Create a status listener. When a new tweet arives, the function object will accept it.
         StatusListener listener = new TwitterStatusListener(fn);
