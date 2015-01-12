@@ -26,8 +26,12 @@ import java.util.logging.Logger;
 public class MySQLDatabase {
     private Connection connect;
     private Statement statement;
-    private PreparedStatement preparedStatement;
     private ResultSet returnSet;
+    
+    private PreparedStatement preparedStatement;
+    private int insertsInBatch;
+    private final int maxInsertInBatch;
+    
     
     private final Map<String, String> tableLayout;
     private final List<String> columns;
@@ -38,6 +42,9 @@ public class MySQLDatabase {
         String host = settings[0];
         String user = settings[1];
         String password = settings[2];
+        
+        maxInsertInBatch = 100;
+        preparedStatement = null;
         
         this.tableLayout = tableLayout;
         
@@ -55,30 +62,38 @@ public class MySQLDatabase {
         }
     }
     
-    public void insert(String tableName, Map<String, Object> values) {
+    private void prepareInsertStatement(String tableName) throws SQLException {
         if (running) {
-            if (values.keySet().size() == tableLayout.keySet().size()) {
+            if (preparedStatement == null) {
                 // Create the prepared statement
                 StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
                 queryBuilder.append(tableName)
                         .append(" (");
-                
+
                 columns.forEach(column -> queryBuilder.append(column + ","));
-                
+
                 // remove last ',' and replace it by a ')'
                 queryBuilder.replace(queryBuilder.length() - 1, queryBuilder.length(), ")");
-                
+
                 queryBuilder.append(" VALUES (");
                 columns.forEach(column -> queryBuilder.append("?,"));
-                     
+
                 // remove last ',' and replace it by a ')'
                 queryBuilder.replace(queryBuilder.length() - 1, queryBuilder.length(), ")");
                 
-                
+                insertsInBatch = 0;
+                preparedStatement =  connect.prepareStatement(queryBuilder.toString());
+            }
+        } else {
+            preparedStatement = null;
+        }
+    }
+    
+    public void insert(String tableName, Map<String, Object> values) {
+        if (running) {
+            if (values.keySet().size() == tableLayout.keySet().size()) {
                 try {
-                    // No make the prepared statement
-                    preparedStatement = connect.prepareStatement(queryBuilder.toString());
-                    
+                    prepareInsertStatement(tableName);
                     // Replace the questionmarks by their actual values!
                     // THIS HAS TO BE CHANGED WHENEVER TABLELAYOUT IS CHANGED!
                     for (int i = 1; i <= columns.size(); i++) {
@@ -103,9 +118,14 @@ public class MySQLDatabase {
                             System.err.println("Column " + column + " not given in values.");
                         }
                     }
+                    insertsInBatch += 1;
+                    preparedStatement.addBatch();
                     
-                    // Insert!
-                    preparedStatement.executeUpdate();
+                    if (insertsInBatch >= maxInsertInBatch) {
+                        preparedStatement.executeBatch();
+                        preparedStatement.clearBatch();
+                        insertsInBatch = 0;
+                    }
                     
                 } catch (SQLException ex) {
                     Logger.getLogger(MySQLDatabase.class.getName()).log(Level.SEVERE, null, ex);
