@@ -43,7 +43,7 @@ public class MySQLDatabase {
         String user = settings[1];
         String password = settings[2];
         
-        maxInsertInBatch = 100;
+        maxInsertInBatch = 1000;
         preparedStatement = null;
         
         this.tableLayout = tableLayout;
