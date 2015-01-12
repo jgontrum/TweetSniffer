@@ -5,6 +5,7 @@
  */
 package de.up.ling.stud.twitter.Tweets2SQL;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import twitter4j.Status;
@@ -23,11 +24,17 @@ public class MySQLAccessor {
         // Create the used layout of the table in the database
         tableLayout = new HashMap<>();
         tableLayout.put("Text", "TEXT");
+        tableLayout.put("Tokenized", "TEXT");
         tableLayout.put("UserID", "BIGINT");
         tableLayout.put("TweetID", "BIGINT");
         tableLayout.put("CreatedAt", "BIGINT");
         tableLayout.put("JSON", "TEXT");
-        
+        tableLayout.put("LangID", "CHAR");
+        tableLayout.put("Longitude", "DOUBLE");
+        tableLayout.put("Latitude", "DOUBLE");
+        tableLayout.put("Country", "CHAR");
+        tableLayout.put("LocationDE", "TINYINT");
+
         // Connect to DB server
         database = new MySQLDatabase(sqlSettings, tableLayout);
         
@@ -60,6 +67,12 @@ public class MySQLAccessor {
                 case "JSON":
                     insertValue = json;
                     break;
+                case "Longitude":
+                    insertValue = tweet.getGeoLocation() == null? -1 : tweet.getGeoLocation().getLongitude() ;
+                    break;
+                case "Latitude":
+                    insertValue = tweet.getGeoLocation() == null ? -1 : tweet.getGeoLocation().getLatitude();
+                    break;
             }
             insert.put(column, insertValue);
         });
@@ -79,5 +92,9 @@ public class MySQLAccessor {
 //            database.createTable(currentTable);
 //        }
         database.insert(table, values);
+    }
+    
+    public void closeDB() {
+        database.close();
     }
 }

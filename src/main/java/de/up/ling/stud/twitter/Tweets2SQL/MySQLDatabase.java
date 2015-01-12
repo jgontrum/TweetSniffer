@@ -99,24 +99,60 @@ public class MySQLDatabase {
                     for (int i = 1; i <= columns.size(); i++) {
                         String column = columns.get(i-1);
                         Object currentValue = values.getOrDefault(column, null);
-                        if (currentValue != null) {
-                            String columnType = tableLayout.get(column);
-                            // Integer
-                            if (columnType.startsWith("INT")) {
+                        String columnType = tableLayout.get(column);
+                        // Integer
+                        if (columnType.startsWith("INT")) {
+                            if (currentValue != null) {
                                 preparedStatement.setInt(i, (Integer) currentValue);
+                            } else {
+                                preparedStatement.setNull(i, java.sql.Types.INTEGER);
                             }
-                            // Long
-                            if (columnType.startsWith("BIGINT")) {
-                                preparedStatement.setLong(i, (Long) currentValue);
-                            }
-                            // Text
-                            if (columnType.startsWith("TEXT")) {
-                                preparedStatement.setString(i, (String) currentValue);
-                            }
-                            // ... Add more if needed!
-                        } else {
-                            System.err.println("Column " + column + " not given in values.");
                         }
+                        // Long
+                        if (columnType.startsWith("BIGINT")) {
+                            if (currentValue != null) {
+                                preparedStatement.setLong(i, (long) currentValue);
+                            } else {
+                                preparedStatement.setNull(i, java.sql.Types.BIGINT);
+                            }
+                        }
+                        // Text
+                        if (columnType.startsWith("TEXT")) {
+                            if (currentValue != null) {
+                                preparedStatement.setString(i, (String) currentValue);
+                            } else {
+                                preparedStatement.setString(i, "");
+                            }                        }
+                        // Char
+                        if (columnType.startsWith("CHAR")) {
+                            if (currentValue != null) {
+                                preparedStatement.setString(i, (String) currentValue);
+                            } else {
+                                preparedStatement.setNull(i, java.sql.Types.CHAR);
+                            }                        }
+                        // Double
+                        if (columnType.startsWith("DOUBLE")) {
+                            if (currentValue != null) {
+                                preparedStatement.setDouble(i, (double) currentValue);
+                            } else {
+                                preparedStatement.setNull(i, java.sql.Types.DOUBLE);
+                            }                        }
+                        // Float
+                        if (columnType.startsWith("FLOAT")) {
+                            if (currentValue != null) {
+                                preparedStatement.setFloat(i, (float) currentValue);
+                            } else {
+                                preparedStatement.setNull(i, java.sql.Types.FLOAT);
+                            }                        }
+                        // Tinyint
+                        if (columnType.startsWith("TINYINT")) {
+                            if (currentValue != null) {
+                                preparedStatement.setByte(i, (byte) currentValue);
+                            } else {
+                                preparedStatement.setNull(i, java.sql.Types.TINYINT);
+                            }                        }
+                        // ... Add more if needed!
+
                     }
                     insertsInBatch += 1;
                     preparedStatement.addBatch();
@@ -135,6 +171,19 @@ public class MySQLDatabase {
                 System.err.println("MySQLAccess: Failed to insert values: Number of the given values does not match the table layout!");
             }
         }
+    }
+    
+    public void close() {
+        try {
+            if (preparedStatement != null) {
+                preparedStatement.executeBatch();
+            }
+            connect.close();
+        } 
+        catch (SQLException e) {
+            System.err.println("Error while closing connection: " + e.getMessage());
+        }
+
     }
     
     /**

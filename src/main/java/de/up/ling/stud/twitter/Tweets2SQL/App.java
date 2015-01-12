@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.Properties;
 import twitter4j.TwitterException;
 
@@ -55,12 +56,14 @@ public class App
             });
         } else {
             JSONReader.stream(arguments.jsonFile, (tweet, json) -> {
-                if (!tweet.isRetweet()) { //ignore RTs
+                if (!tweet.isRetweet() && tweet.getGeoLocation() != null) { //ignore RTs
                     System.out.println("Tweet: " + tweet.getText());
                     database.queryTweet(tweet, json);
                 }
             });
         }
+        
+        database.closeDB();
         
     }
     
