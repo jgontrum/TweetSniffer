@@ -8,6 +8,7 @@ package de.up.ling.stud.twitter.Tweets2SQL;
 import java.util.HashMap;
 import java.util.Map;
 import twitter4j.Status;
+import twitter4j.TwitterObjectFactory;
 
 /**
  *
@@ -57,7 +58,7 @@ public class MySQLAccessor {
                     insertValue = tweet.getCreatedAt().getTime() / 1000L; // UNIX timestamp
                     break;
                 case "JSON":
-                    insertValue = tweet.toString();
+                    insertValue = TwitterObjectFactory.getRawJSON(tweet);
                     break;
             }
             insert.put(column, insertValue);

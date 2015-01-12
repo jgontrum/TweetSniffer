@@ -20,6 +20,9 @@ public class CommandLineArguments {
     @Parameter(names = {"--testdb", "--test", "-t"}, description = "Only try to connect to the database server and NOT to Twitter. Usefull if you have to troubleshoot your MySQL settings.")
     public boolean testDB = false;    
     
+    @Parameter(names = { "--jsonfile", "-j" }, description = "Only insert Tweets from JSON objects within the given file.")
+    public String jsonFile = null;
+    
     @Parameter(names = {"help", "--help", "-help", "--usage", "--info"}, description="Displays this information.", help = true)
     public boolean help;
 }
