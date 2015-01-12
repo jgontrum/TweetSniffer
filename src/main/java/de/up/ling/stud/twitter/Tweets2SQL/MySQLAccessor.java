@@ -65,7 +65,7 @@ public class MySQLAccessor {
                     insertValue = tweet.getCreatedAt().getTime() / 1000L; // UNIX timestamp
                     break;
                 case "JSON":
-                    insertValue = json;
+                    insertValue = null; // json
                     break;
                 case "Longitude":
                     insertValue = tweet.getGeoLocation() == null? -1 : tweet.getGeoLocation().getLongitude() ;
