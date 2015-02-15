@@ -56,9 +56,12 @@ public class App
             });
         } else {
             JSONReader.stream(arguments.jsonFile, (tweet, json) -> {
-                if (!tweet.isRetweet() && tweet.getGeoLocation() != null) { //ignore RTs
-                    System.out.println("Tweet: " + tweet.getText());
+//                if (!tweet.isRetweet() && tweet.getGeoLocation() != null) { //ignore RTs
+                if (!tweet.isRetweet()) { //ignore RTs
+
+//                    System.out.println("Tweet: " + tweet.getText());
                     database.queryTweet(tweet, json);
+                    System.err.println(json);
                 }
             });
         }

@@ -28,12 +28,17 @@ public class MySQLAccessor {
         tableLayout.put("UserID", "BIGINT");
         tableLayout.put("TweetID", "BIGINT");
         tableLayout.put("CreatedAt", "BIGINT");
-        tableLayout.put("JSON", "TEXT");
+//        tableLayout.put("JSON", "TEXT");
         tableLayout.put("LangID", "CHAR");
         tableLayout.put("Longitude", "DOUBLE");
         tableLayout.put("Latitude", "DOUBLE");
         tableLayout.put("Country", "CHAR");
         tableLayout.put("LocationDE", "TINYINT");
+        tableLayout.put("ReplyToTweetID", "BIGINT");
+        tableLayout.put("ReplyToUserID", "BIGINT");
+        tableLayout.put("Source", "TEXT");
+        tableLayout.put("Follower", "INT");
+
 
         // Connect to DB server
         database = new MySQLDatabase(sqlSettings, tableLayout);
@@ -73,12 +78,24 @@ public class MySQLAccessor {
                 case "Latitude":
                     insertValue = tweet.getGeoLocation() == null ? -1 : tweet.getGeoLocation().getLatitude();
                     break;
+                case "ReplyToTweetID":
+                    insertValue = tweet.getInReplyToStatusId();
+                    break;
+                case "ReplyToUserID":
+                    insertValue = tweet.getInReplyToUserId();
+                    break;
+                case "Source":
+                    insertValue = tweet.getSource();
+                    break;
+                case "Follower":
+                    insertValue = tweet.getUser().getFollowersCount();
+                    break;
             }
             insert.put(column, insertValue);
         });
         
         // insert it into the database.
-        saveInsert(currentTable, insert);
+        saveInsert(insert);
     }
     
     /**
@@ -87,11 +104,11 @@ public class MySQLAccessor {
      * @param table
      * @param values 
      */
-    private void saveInsert(String table, Map<String, Object> values) {
+    private void saveInsert(Map<String, Object> values) {
 //        if (!database.doesTableExist(currentTable)) {
 //            database.createTable(currentTable);
 //        }
-        database.insert(table, values);
+        database.insert(values);
     }
     
     public void closeDB() {
