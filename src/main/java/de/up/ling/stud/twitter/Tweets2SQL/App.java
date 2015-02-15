@@ -50,6 +50,7 @@ public class App
             // Start streaming
             TweetStreamer.stream(apiKeys, stopWords, users, coordinates, (tweet, json) -> {
                 if (!tweet.isRetweet()) { //ignore RTs
+                    System.out.println("-> " + tweet.getText());
                     database.queryTweet(tweet, json);
                 }
             });
