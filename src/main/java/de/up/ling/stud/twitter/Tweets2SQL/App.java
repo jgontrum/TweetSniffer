@@ -100,6 +100,8 @@ public class App
         sqlSettings[1] = prop.getProperty("mySQLUser", "");
         sqlSettings[2] = prop.getProperty("mySQLPassword", "");
         sqlSettings[3] = prop.getProperty("mySQLTablePrefix", "DEFAULT");
+        sqlSettings[4] = prop.getProperty("numberOfQueries", "200");
+        sqlSettings[5] = prop.getProperty("numberToCommit", "3000");
 
         if (sqlSettings[0].isEmpty() || sqlSettings[1].isEmpty() || sqlSettings[2].isEmpty()) {
             System.err.println("Please specify your mySQLHost, mySQLUser and mySQLPassword in a file called 'config.properties");

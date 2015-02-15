@@ -50,8 +50,8 @@ public class MySQLDatabase {
         
         tableName = settings[3];
         
-        maxInsertsInBatch = 300;
-        maxInsertsToCommit = 5000;
+        maxInsertsInBatch = Integer.parseInt(settings[4]);
+        maxInsertsToCommit = Integer.parseInt(settings[5]);
         
         currentInserts = 0;
         preparedStatement = null;

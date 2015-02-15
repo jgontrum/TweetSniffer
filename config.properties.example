@@ -1,9 +1,13 @@
+[TwitterAPI]
 consumerKey=
 consumerSecret=
 token=
 secret=
 
+[MySQL]
 mySQLHost=myserver.com # enter host here
 mySQLUser=
 mySQLPassword=
 mySQLTablePrefix=testTable # name of the table to write into! WARNING! not yet secure, is writen directly into the query.
+numberOfQueries=2000
+numberToCommit=30000
