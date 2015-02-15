@@ -50,7 +50,6 @@ public class App
             // Start streaming
             TweetStreamer.stream(apiKeys, stopWords, users, coordinates, (tweet, json) -> {
                 if (!tweet.isRetweet()) { //ignore RTs
-                    System.out.println("Tweet: " + tweet.getText());
                     database.queryTweet(tweet, json);
                 }
             });
@@ -58,10 +57,8 @@ public class App
             JSONReader.stream(arguments.jsonFile, (tweet, json) -> {
 //                if (!tweet.isRetweet() && tweet.getGeoLocation() != null) { //ignore RTs
                 if (!tweet.isRetweet()) { //ignore RTs
-
-//                    System.out.println("Tweet: " + tweet.getText());
                     database.queryTweet(tweet, json);
-                    System.err.println(json);
+//                    System.out.println(json);
                 }
             });
         }
