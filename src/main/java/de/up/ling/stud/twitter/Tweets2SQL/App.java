@@ -49,7 +49,7 @@ public class App
         if (arguments.jsonFile == null) {
             // Start streaming
             TweetStreamer.stream(apiKeys, stopWords, users, coordinates, (tweet, json) -> {
-                if (!tweet.isRetweet()) { //ignore RTs
+                if (!tweet.isRetweet() && tweet.getGeoLocation() != null) { //ignore RTs
                     System.out.println("-> " + tweet.getText());
                     database.queryTweet(tweet, json);
                 }
@@ -62,9 +62,9 @@ public class App
 //                    System.out.println(json);
                 }
             });
+            database.closeDB();
         }
         
-        database.closeDB();
         
     }
     

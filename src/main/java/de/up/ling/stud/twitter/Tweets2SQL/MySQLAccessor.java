@@ -37,7 +37,6 @@ public class MySQLAccessor {
         tableLayout.put("Follower", "INT");
         
         // Save JSON?
-        System.err.println(sqlSettings[6]);
         if (sqlSettings[6].startsWith("True")) {
             tableLayout.put("JSON", "TEXT");
         }
