@@ -26,7 +26,6 @@ public class MySQLAccessor {
         tableLayout.put("UserID", "BIGINT");
         tableLayout.put("TweetID", "BIGINT");
         tableLayout.put("CreatedAt", "BIGINT");
-//        tableLayout.put("JSON", "TEXT");
         tableLayout.put("LangID", "CHAR");
         tableLayout.put("Longitude", "DOUBLE");
         tableLayout.put("Latitude", "DOUBLE");
@@ -36,8 +35,12 @@ public class MySQLAccessor {
         tableLayout.put("ReplyToUserID", "BIGINT");
         tableLayout.put("Source", "TEXT");
         tableLayout.put("Follower", "INT");
-
-
+        
+        // Save JSON?
+        System.err.println(sqlSettings[6]);
+        if (sqlSettings[6].startsWith("True")) {
+            tableLayout.put("JSON", "TEXT");
+        }
         // Connect to DB server
         database = new MySQLDatabase(sqlSettings, tableLayout);
         
@@ -68,7 +71,7 @@ public class MySQLAccessor {
                     insertValue = tweet.getCreatedAt().getTime() / 1000L; // UNIX timestamp
                     break;
                 case "JSON":
-                    insertValue = null; // json
+                    insertValue = json; // json
                     break;
                 case "Longitude":
                     insertValue = tweet.getGeoLocation() == null? -1 : tweet.getGeoLocation().getLongitude() ;

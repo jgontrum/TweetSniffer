@@ -94,7 +94,7 @@ public class App
         InputStream input = new FileInputStream(configFile);
         prop.load(input);
 
-        String[] sqlSettings = new String[6];
+        String[] sqlSettings = new String[7];
 
         sqlSettings[0] = "jdbc:mysql://" + prop.getProperty("mySQLHost", "");
         sqlSettings[1] = prop.getProperty("mySQLUser", "");
@@ -102,6 +102,8 @@ public class App
         sqlSettings[3] = prop.getProperty("mySQLTablePrefix", "DEFAULT");
         sqlSettings[4] = prop.getProperty("numberOfQueries", "200");
         sqlSettings[5] = prop.getProperty("numberToCommit", "3000");
+        sqlSettings[6] = prop.getProperty("saveJSON", "False");
+
 
         if (sqlSettings[0].isEmpty() || sqlSettings[1].isEmpty() || sqlSettings[2].isEmpty()) {
             System.err.println("Please specify your mySQLHost, mySQLUser and mySQLPassword in a file called 'config.properties");
