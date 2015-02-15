@@ -94,7 +94,7 @@ public class App
         InputStream input = new FileInputStream(configFile);
         prop.load(input);
 
-        String[] sqlSettings = new String[4];
+        String[] sqlSettings = new String[6];
 
         sqlSettings[0] = "jdbc:mysql://" + prop.getProperty("mySQLHost", "");
         sqlSettings[1] = prop.getProperty("mySQLUser", "");

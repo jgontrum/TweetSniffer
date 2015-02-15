@@ -5,11 +5,9 @@
  */
 package de.up.ling.stud.twitter.Tweets2SQL;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import twitter4j.Status;
-import twitter4j.TwitterObjectFactory;
 
 /**
  *
