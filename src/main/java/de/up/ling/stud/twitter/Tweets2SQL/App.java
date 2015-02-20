@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Properties;
 import twitter4j.TwitterException;
 
@@ -60,7 +59,7 @@ public class App
                 if (!tweet.isRetweet()) { //ignore RTs
                     database.queryTweet(tweet, json);
 //                    System.out.println(json);
-                }
+                    }
             });
             database.closeDB();
         }

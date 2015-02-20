@@ -80,7 +80,7 @@ public class MySQLDatabase {
         String user = settings[1];
         String password = settings[2];
         
-        connect = DriverManager.getConnection(host, user, password);
+        connect = DriverManager.getConnection(host + "?useUnicode=yes&characterEncoding=UTF-8", user, password);
     }
     
     private void prepareInsertStatement(int inserts) throws SQLException  {
