@@ -8,6 +8,7 @@ package de.up.ling.stud.twitter.Tweets2SQL;
 import java.util.HashMap;
 import java.util.Map;
 import twitter4j.Status;
+import twitter4j.UserMentionEntity;
 
 /**
  *
@@ -21,21 +22,27 @@ public class MySQLAccessor {
     public MySQLAccessor(String[] sqlSettings) {
         // Create the used layout of the table in the database
         tableLayout = new HashMap<>();
-        tableLayout.put("Text", "TEXT");
-        tableLayout.put("Tokenized", "TEXT");
-        tableLayout.put("UserID", "BIGINT");
-        tableLayout.put("TweetID", "BIGINT");
-        tableLayout.put("CreatedAt", "BIGINT");
-        tableLayout.put("LangID", "CHAR");
-        tableLayout.put("Longitude", "DOUBLE");
-        tableLayout.put("Latitude", "DOUBLE");
-        tableLayout.put("Country", "CHAR");
-        tableLayout.put("LocationDE", "TINYINT");
-        tableLayout.put("ReplyToTweetID", "BIGINT");
-        tableLayout.put("ReplyToUserID", "BIGINT");
-        tableLayout.put("Source", "TEXT");
-        tableLayout.put("Follower", "INT");
         
+        tableLayout.put("id", "BIGINT");
+        tableLayout.put("user_id", "BIGINT");
+        tableLayout.put("friends_count", "INT");
+        tableLayout.put("followers_count", "INT");
+        tableLayout.put("in_reply_to_status_id", "BIGINT");
+        tableLayout.put("in_reply_to_user_id", "BIGINT");
+        tableLayout.put("user_mentions_count", "INT");
+        tableLayout.put("user_mentions_list", "TEXT");
+        tableLayout.put("created_at", "BIGINT");
+        tableLayout.put("source", "TEXT");
+        tableLayout.put("text", "VARCHAR(200)");
+        tableLayout.put("direct_replies_count", "INT");
+        tableLayout.put("direct_replies_list", "TEXT");
+        tableLayout.put("indirect_replies_count", "INT");
+        tableLayout.put("indirect_replies_list", "TEXT");
+        tableLayout.put("is_base_tweet", "TINYINT");
+        tableLayout.put("is_question", "TINYINT");
+        tableLayout.put("question_mark_counter", "INT");
+        tableLayout.put("is_wh_question", "TINYINT");
+
         // Save JSON?
         if (sqlSettings[6].startsWith("True")) {
             tableLayout.put("JSON", "TEXT");
@@ -57,38 +64,58 @@ public class MySQLAccessor {
         tableLayout.keySet().forEach(column -> {
             Object insertValue = null;
             switch (column) {
-                case "Text":
+                case "text":
                     insertValue = tweet.getText();
                     break;
-                case "UserID":
+                case "user_id":
                     insertValue = tweet.getUser().getId();
                     break;
-                case "TweetID":
+                case "id":
                     insertValue = tweet.getId();
                     break;
-                case "CreatedAt":
+                case "created_at":
                     insertValue = tweet.getCreatedAt().getTime() / 1000L; // UNIX timestamp
                     break;
+                case "in_reply_to_status_id":
+                    insertValue = tweet.getInReplyToStatusId();
+                    break;
+                case "in_reply_to_user_id":
+                    insertValue = tweet.getInReplyToUserId();
+                    break;
+                case "source":
+                    insertValue = tweet.getSource();
+                    break;
+                case "followers_count":
+                    insertValue = tweet.getUser().getFollowersCount();
+                    break;
+                case "friends_count":
+                    insertValue = tweet.getUser().getFriendsCount();
+                    break;
+                case "user_mentions_count":
+                    insertValue = tweet.getUserMentionEntities().length;
+                    break;
+                case "user_mentions_list":
+                    // = "12345","1234555","..."
+                    StringBuilder sb = new StringBuilder();
+                    for (UserMentionEntity mention : tweet.getUserMentionEntities()) {
+                        sb.append("\"");
+                        sb.append(mention.getId());
+                        sb.append("\",");
+                    }
+                    if (sb.length() > 0) {
+                        sb.replace(sb.length() - 1, sb.length(), "");
+                    }
+                    insertValue = sb.toString();
+                    break;
+                    
                 case "JSON":
                     insertValue = json; // json
                     break;
                 case "Longitude":
-                    insertValue = tweet.getGeoLocation() == null? -1 : tweet.getGeoLocation().getLongitude() ;
+                    insertValue = tweet.getGeoLocation() == null ? -1 : tweet.getGeoLocation().getLongitude();
                     break;
                 case "Latitude":
                     insertValue = tweet.getGeoLocation() == null ? -1 : tweet.getGeoLocation().getLatitude();
-                    break;
-                case "ReplyToTweetID":
-                    insertValue = tweet.getInReplyToStatusId();
-                    break;
-                case "ReplyToUserID":
-                    insertValue = tweet.getInReplyToUserId();
-                    break;
-                case "Source":
-                    insertValue = tweet.getSource();
-                    break;
-                case "Follower":
-                    insertValue = tweet.getUser().getFollowersCount();
                     break;
             }
             insert.put(column, insertValue);

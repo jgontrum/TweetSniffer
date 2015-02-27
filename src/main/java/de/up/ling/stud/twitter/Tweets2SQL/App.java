@@ -58,7 +58,7 @@ public class App
 //                if (!tweet.isRetweet() && tweet.getGeoLocation() != null) { //ignore RTs
                 if (!tweet.isRetweet()) { //ignore RTs
                     database.queryTweet(tweet, json);
-//                    System.out.println(json);
+                    System.out.println(tweet.getText());
                     }
             });
             database.closeDB();

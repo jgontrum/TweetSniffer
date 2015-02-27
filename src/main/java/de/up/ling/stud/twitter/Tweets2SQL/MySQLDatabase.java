@@ -68,6 +68,8 @@ public class MySQLDatabase {
             connect(settings);
             connect.setAutoCommit(false);  
             statement = connect.createStatement();
+            statement.execute("SET NAMES utf8mb4;");
+            connect.commit();
             running = true;
         } catch (SQLException e) {
             System.err.println("mySQL: Could not connect: " + e.toString());
@@ -80,7 +82,7 @@ public class MySQLDatabase {
         String user = settings[1];
         String password = settings[2];
         
-        connect = DriverManager.getConnection(host + "?useUnicode=yes&characterEncoding=UTF-8", user, password);
+        connect = DriverManager.getConnection(host + "?useUnicode=yes", user, password);
     }
     
     private void prepareInsertStatement(int inserts) throws SQLException  {
@@ -171,6 +173,14 @@ public class MySQLDatabase {
                         preparedStatement.setString(i, "");
                     }
                 }
+                // Varchar
+                if (columnType.startsWith("VARCHAR")) {
+                    if (currentValue != null) {
+                        preparedStatement.setString(i, (String) currentValue);
+                    } else {
+                        preparedStatement.setString(i, "");
+                    }
+                }
                 // Char
                 if (columnType.startsWith("CHAR")) {
                     if (currentValue != null) {
@@ -219,6 +229,7 @@ public class MySQLDatabase {
 
         // Now make the query!
         System.err.println("Making a query...");
+//        System.err.println(preparedStatement);
         preparedStatement.executeUpdate();
         
         if (currentInserts >= maxInsertsToCommit) {
